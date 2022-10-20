@@ -87,11 +87,6 @@ const OnboardingScreen = ({ setFirstLaunch }) => {
                   marginTop: -70,
                 }}
               >
-                Enter Phone number to sent text to.
-                <TextInput
-                  style={(color: "black";)}
-                  placeholder="Phone Number"
-                />
               </Text>
             </View>
           ),
