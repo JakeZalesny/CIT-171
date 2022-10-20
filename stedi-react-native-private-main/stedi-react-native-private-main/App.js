@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from './screens/OnboardingScreen';
 import Home from './screens/Home';
 import { NavigationContainer } from '@react-navigation/native';
+import { TextInput } from 'react-native-paper';
 
 
 
@@ -21,8 +22,17 @@ return(
   <OnboardingScreen setFirstLaunch={setFirstLaunch}/>
  
 );
+   }else if(isLoggedIn) {
+    return <Navigation/>;
   }else{
-    return <Navigation/>
+    return (
+      <View>
+        <TextInput 
+        style={styles.input} 
+        placeholderTextColor='#4251f5'
+        placeholder='Cell Phone'></TextInput>
+      </View>
+    )
   }
 }
  export default App;
