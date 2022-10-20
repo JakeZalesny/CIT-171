@@ -35,7 +35,7 @@ const App = () => {
         ></TextInput>
         <Button
           title="Send"
-          style={styles.Button}
+          style={styles.button}
           onPress={() => {
             console.log("Button was pressed");
           }}
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   input: {
     height: 40,
     margin: 12,
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
   margin: {
     marginTop: 100,
   },
+
   button: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
