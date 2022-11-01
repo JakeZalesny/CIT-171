@@ -6,13 +6,14 @@ import {
   Image,
   TouchableOpacity,
   AsyncStorage,
+  Alert,
 } from "react-native";
 import Navigation from "./components/Navigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import Home from "./screens/Home";
 import { NavigationContainer } from "@react-navigation/native";
-import { Button, TextInput } from "react-native-paper";
+import {Button ,TextInput } from "react-native-paper";
 
 const AppStack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
+  const [tempCode, setTempCode] = React.useState(null);
 
   if (isFirstLaunch == true) {
     return <OnboardingScreen setFirstLaunch={setFirstLaunch} />;
@@ -48,6 +50,43 @@ const App = () => {
                 "content-type": "application/text",
               },
             });
+          }}
+        ></Button>
+        <TextInput
+          value={tempCode}
+          onChangeText={setTempCode}
+          style={styles.input}
+          placeholderTextColor="#4251f5"
+          placeholder="Temp Code"
+        ></TextInput>
+        <Button
+          title="Send"
+          style={styles.button}
+          onPress={async () => {
+            console.log("Button was pressed");
+
+            const loginResponse = await fetch(
+              "https://dev.stedi.me/twofactorlogin",
+              {
+                method: "POST",
+                headers: {
+                  "content-type": "application/text",
+                },
+                body: JSON.stringify({
+                  phoneNumber,
+                  oneTimePassword: tempCode,
+                }),
+              }
+            );
+            console.log(loginResponse.status);
+
+            if (loginResponse.status == 200) {
+              const sessionToken = await loginResponse.text();
+              console.log("Session Token", sessionToken);
+              setIsLoggedIn(true);
+            } else {
+              Alert.alert("Warning", "An invalid code was entered.");
+            }
           }}
         ></Button>
       </View>
