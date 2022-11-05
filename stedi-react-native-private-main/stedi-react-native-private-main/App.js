@@ -24,7 +24,21 @@ const App = () => {
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
   const [tempCode, setTempCode] = React.useState(null);
 
-  if (isFirstLaunch == true) {
+  useEffect(()=> {
+    const getSessionToken = async() => {
+      const sessionToken = await AsyncStorage.getItem("sessionToken");
+      console.log("token from storage", sessionToken);
+      const validateResponse = await fetch("https://dev.stedi.me/validate/" + sessionToken);
+      if (validateResponse.status == 200) {
+        const userEmail = await validateResponse.text(); 
+        console.log('userEmail', userEmail);
+        setIsLoggedIn(true);
+      }
+    }
+    getSessionToken(); 
+  }, [])
+
+  if (isFirstLaunch == true && !isLoggedIn) {
     return <OnboardingScreen setFirstLaunch={setFirstLaunch} />;
   } else if (isLoggedIn) {
     return <Navigation />;
