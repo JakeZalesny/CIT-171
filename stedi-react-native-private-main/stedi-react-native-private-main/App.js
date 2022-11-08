@@ -24,19 +24,22 @@ const App = () => {
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
   const [tempCode, setTempCode] = React.useState(null);
 
-  useEffect(()=> {
-    const getSessionToken = async() => {
+  useEffect(() => {
+    const getSessionToken = async () => {
       const sessionToken = await AsyncStorage.getItem("sessionToken");
       console.log("token from storage", sessionToken);
-      const validateResponse = await fetch("https://dev.stedi.me/validate/" + sessionToken);
+      const validateResponse = await fetch(
+        "https://dev.stedi.me/validate/" + sessionToken
+      );
       if (validateResponse.status == 200) {
-        const userEmail = await validateResponse.text(); 
-        console.log('userEmail', userEmail);
+        const userEmail = await validateResponse.text();
+        await AsyncStorage.setItem("userName", userEmail)
+        console.log("userEmail", userEmail);
         setIsLoggedIn(true);
       }
-    }
-    getSessionToken(); 
-  }, [])
+    };
+    getSessionToken();
+  }, []);
 
   if (isFirstLaunch == true && !isLoggedIn) {
     return <OnboardingScreen setFirstLaunch={setFirstLaunch} />;
@@ -58,12 +61,25 @@ const App = () => {
           onPress={async () => {
             console.log(phoneNumber + "Button was pressed");
 
-            await fetch("https://dev.stedi.me/twofactorlogin/" + phoneNumber, {
-              method: "POST",
-              headers: {
-                "content-type": "application/text",
-              },
-            });
+            const sendTextResponse = await fetch(
+              "https://dev.stedi.me/twofactorlogin/" + phoneNumber,
+              {
+                method: "POST",
+                headers: {
+                  "content-type": "application/text",
+                },
+              }
+            );
+            if (sendTextResponse.status != 200) {
+              console.log(
+                "Server Send text respnose: " + sendTextResponse.status
+              );
+              Alert(
+                "Communication Error",
+                "Server responded to send text with status: " +
+                  sendTextResponse.status
+              );
+            }
           }}
         ></Button>
         <TextInput
