@@ -12,6 +12,7 @@ import quotes from "../data/quote.json";
 import { Card, CardTitle, CardContent } from "react-native-material-cards";
 import { LineChart } from "react-native-chart-kit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Camera } from "expo-camera";
 
 const Home = (props) => {
   const token = useRef("");

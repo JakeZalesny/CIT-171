@@ -14,6 +14,7 @@ import Home from "./screens/Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { Button, TextInput } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Camera } from "expo-camera";
 
 const AppStack = createNativeStackNavigator();
 
@@ -33,7 +34,7 @@ const App = () => {
       );
       if (validateResponse.status == 200) {
         const userEmail = await validateResponse.text();
-        await AsyncStorage.setItem("userName", userEmail)
+        await AsyncStorage.setItem("userName", userEmail);
         console.log("userEmail", userEmail);
         setIsLoggedIn(true);
       }
